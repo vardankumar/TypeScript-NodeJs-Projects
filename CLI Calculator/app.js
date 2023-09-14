@@ -1,55 +1,76 @@
+#!/usr/bin/env node
 import inquirer from "inquirer";
 import { sum, subtract, multiply, divide } from "./Operations/operators.js";
 import chalk from 'chalk';
-let answer = await inquirer.prompt([
-    {
-        message: 'Enter your first number',
-        type: "number",
-        name: "num1"
-    },
-    {
-        message: 'Enter your second number',
-        type: "number",
-        name: "num2"
-    },
-    {
-        message: 'Choose operator',
-        type: "list",
-        choices: ["+", "-", "*", "/"],
-        name: "operator"
-    }
-]);
-// console.log(answer.num1)
-// console.log(answer.num2)
-// let num2 = inquirer.prompt(
-//     {
-//         message : 'Enter your second number',
-//         type : "number",
-//         name : "num2"
-//     }
-//
-let result;
-// if(answer.operator === "+") {
-//     result = sum(answer.num1, answer.num2);
-// }
-switch (answer.operator) {
-    case "+":
-        result = sum(answer.num1, answer.num2);
-        console.log(chalk.bgBlackBright(result));
-        break;
-    case "-":
-        result = subtract(answer.num1, answer.num2);
-        break;
-    case "*":
-        result = multiply(answer.num1, answer.num2);
-        break;
-    case "/":
-        result = divide(answer.num1, answer.num2);
-        break;
-    default:
-        break;
+import chalkAnimation from 'chalk-animation';
+const sleep = () => {
+    return new Promise((res) => {
+        setTimeout(res, 2000);
+    });
+};
+async function welcome() {
+    let rainbowTitle = chalkAnimation.rainbow('Command Line Calculator');
+    await sleep();
+    rainbowTitle.replace('With Node.JS, INQUIRER AND CHALK');
+    await sleep();
+    rainbowTitle.replace('Let\'s Enjoy Calculation');
+    await sleep();
+    rainbowTitle.stop();
+    startLoop();
 }
-console.log(result);
+async function askQuestion() {
+    let answer = await inquirer.prompt([
+        {
+            message: chalk.greenBright('Enter your first number'),
+            type: "number",
+            name: "num1"
+        },
+        {
+            message: chalk.greenBright('Enter your seconf number'),
+            type: "number",
+            name: "num2"
+        },
+        {
+            message: chalk.yellowBright('Choose operator \n'),
+            type: "list",
+            choices: ["+", "-", "*", "/"],
+            name: "operator"
+        }
+    ]);
+    let result;
+    switch (answer.operator) {
+        case "+":
+            result = sum(answer.num1, answer.num2);
+            console.log(chalk.bgBlackBright(`${result}`));
+            break;
+        case "-":
+            result = subtract(answer.num1, answer.num2);
+            break;
+        case "*":
+            result = multiply(answer.num1, answer.num2);
+            break;
+        case "/":
+            result = divide(answer.num1, answer.num2);
+            break;
+        default:
+            break;
+    }
+    console.log(result);
+}
+async function startLoop() {
+    do {
+        await askQuestion();
+        var again = await inquirer.prompt([
+            {
+                type: 'checkbox',
+                name: 'restart',
+                choices: ['Yes', 'No'],
+                message: chalk.yellowBright('Do you want to continue?')
+            }
+        ]);
+    } while (again.restart == 'Yes');
+}
+welcome();
 // let student1 = {
 //     name : 'Vardan',
 //     age : 25,
