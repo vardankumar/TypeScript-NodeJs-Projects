@@ -39,7 +39,7 @@ let answer = await inquirer.prompt([
     }, 
     
     {
-        message : chalk.greenBright('Enter your seconf number'),
+        message : chalk.greenBright('Enter your second number'),
         type : "number",
         name : "num2"
     }, 
